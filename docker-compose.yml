@@ -1,10 +1,15 @@
-version: "3.9"
+version: "3.4"
 
 services:
   mosquitto:
-    image: eclipse-mosquitto:2.0.12
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile
+    command: mosquitto -c /mosquitto-with-auth.conf
+    environment:
+      AUTH_USER: ${AUTH_USER}
+      AUTH_PASSWORD: ${AUTH_PASSWORD}
+      TOPIC_ANONYMOUS: ${TOPIC_ANONYMOUS}
+      TOPIC_RESTRICTED: ${TOPIC_RESTRICTED}
     ports:
-      - "1883:1883"
-    volumes:
-      - "${MOSQUITTO_CONF-./docker/mosquitto/mosquitto.conf}:/mosquitto/config/mosquitto.conf:ro"
-      - "${MOSQUITTO_INCLUDE_DIR-./docker/mosquitto/conf.d}:/mosquitto/config/conf.d:ro"
+      - "${SERVER_PORT}:1883"

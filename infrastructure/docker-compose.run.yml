@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  mosquitto:
+    image: "${DOCKER_IMAGE}:${DOCKER_TAG}"
+    ports:
+      - "${SERVER_PORT}:${MOSQUITTO_PORT}"
+    volumes:
+      - "${MOSQUITTO_CONF-../docker/mosquitto/mosquitto.conf}:/mosquitto/config/mosquitto.conf:ro"
+      - "${MOSQUITTO_INCLUDE_DIR-../docker/mosquitto/conf.d}:/mosquitto/config/conf.d:ro"
