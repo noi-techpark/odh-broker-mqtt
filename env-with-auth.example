@@ -6,7 +6,7 @@
 # your settings as necessary, e.g. "cp env-with-auth.example .env".
 #
 # The ".env" file will be used by docker-compose to set environment
-# variables for the containers.
+# variables for the MQTT container.
 
 # =================================================================
 # MQTT configuration (mosquitto is used, see https://mosquitto.org/)
@@ -24,53 +24,3 @@ MOSQUITTO_CONF=./docker/mosquitto/mosquitto-with-auth.conf
 # In this example case, the directory contains password file that is referenced
 # by the mosquitto conf (see MOSQUITTO_CONF setting in this file).
 MOSQUITTO_INCLUDE_DIR=./docker/mosquitto/conf.d
-
-# =================================================================
-# Integrator configuration
-# =================================================================
-
-# MQTT URL
-INTEGRATOR_MQTT_URL=tcp://mosquitto:1883
-
-# MQTT username for the integrator, leave this setting empty if mosquitto
-# allows anonymous access.
-# Note that this setting is used in the integrator only. You still have
-# to add the user/password to your MQTT broker. For mosquitto, take a look at the
-# "Authentication" section in https://mosquitto.org/man/mosquitto-conf-5.html
-# in order to get an idea how to do that.
-INTEGRATOR_MQTT_USER=user1
-
-# MQTT username for the integrator, leave this setting empty if mosquitto
-# allows anonymous access.
-# Note that this setting is used in the integrator only. You still have
-# to add the user/password to your MQTT broker. For mosquitto, take a look at the
-# "Authentication" section in https://mosquitto.org/man/mosquitto-conf-5.html
-# in order to get an idea how to do that.
-INTEGRATOR_MQTT_PASS=password1
-
-# The start command for the Docker container that runs the integrator. The
-# default command starts the integrator application in development mode, changes
-# to the source code result in a recompile and restart of the integrator.
-# The development mode is fine for development purposes, but should not be
-# used in production. If you want to start the integrator in production your
-# start command could look like this:
-#
-# bash -c 'mvn clean package -Dquarkus.package.type=uber-jar -D quarkus.package.output-name=integrator -DskipTests && java -jar target/integrator-runner.jar'
-#
-INTEGRATOR_CONTAINER_START_COMMAND=mvn compile quarkus:dev
-
-# =================================================================
-# PostgreSQL configuration
-# =================================================================
-
-# PostgreSQL JDBC URL, where the data is stored to
-POSTGRES_JDBC_URL=jdbc:postgresql://postgres:5432/flightdata
-
-# PostgreSQL database name
-POSTGRES_DB=flightdata
-
-# PostgreSQL database user
-POSTGRES_USER=flightdata
-
-# PostgreSQL database password
-POSTGRES_PASSWORD=__YOUR_PASSWORD__
