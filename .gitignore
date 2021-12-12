@@ -1,6 +1,2 @@
-.idea
-.maven
 .mosquitto
-target
-
 .env
