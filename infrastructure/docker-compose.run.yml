@@ -1,10 +1,16 @@
-version: "3.9"
+version: "3.4"
 
 services:
   mosquitto:
-    image: "${DOCKER_IMAGE}:${DOCKER_TAG}"
+    image: ${DOCKER_IMAGE}:${DOCKER_TAG}
+    restart: unless-stopped
+    command: mosquitto -c /mosquitto-with-auth.conf
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      AUTH_USER: ${AUTH_USER}
+      AUTH_PASSWORD: ${AUTH_PASSWORD}
+      TOPIC_ANONYMOUS: ${TOPIC_ANONYMOUS}
+      TOPIC_RESTRICTED: ${TOPIC_RESTRICTED}
     ports:
-      - "${SERVER_PORT}:${MOSQUITTO_PORT}"
-    volumes:
-      - "${MOSQUITTO_CONF-../docker/mosquitto/mosquitto.conf}:/mosquitto/config/mosquitto.conf:ro"
-      - "${MOSQUITTO_INCLUDE_DIR-../docker/mosquitto/conf.d}:/mosquitto/config/conf.d:ro"
+      - ${SERVER_PORT}:${SERVER_PORT}
+
