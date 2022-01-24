@@ -2,7 +2,9 @@
 
 This project contains configurations and tools to setup a [MQTT](https://mqtt.org/) broker with [mosquitto](https://mosquitto.org/) using [Docker](https://www.docker.com/).
 
-The broker allows anonymous access to a configurable topic and restricted access for a single (configurable) user to a (configurable) restricted topic. Take a look at the  the [env.example](./env.example) file to see how you can configure it.
+By default, the broker allows anonymous access to a configurable topic and restricted access for a single (configurable) user to a (configurable) restricted topic. Take a look at the  the [env.example](./env.example) file to see how you can configure it.
+
+If you want to provide a custom MQTT configuration (e.g. authentication / authorization), take a look at [Custom MQTT configuration](#custom-mqtt-configuration) section.
 
 ## Table of Contents
 
@@ -10,6 +12,7 @@ The broker allows anonymous access to a configurable topic and restricted access
   - [Prerequisites](#prerequisites)
   - [Source code](#source-code)
   - [Execute with Docker](#execute-with-docker)
+  - [Custom MQTT configuration](#custom-mqtt-configuration)
 - [Information](#configuration)
 
 ## Getting started
@@ -52,6 +55,50 @@ docker-compose up
 ```
 
 The service will be available at localhost and your specified server port.
+
+### Custom MQTT configuration
+
+If you want to provide a custom MQTT configuration, you have to do two things:
+
+- provide your config files when you start Docker Compose
+- change the Docker Compose command to start mosquitto with your configuration
+
+> Note: if you provide your own config files, the settings in a `.env` file become irrelevant.
+
+The best way to provide your own config is to override the relevant parts in a `docker-compose.override.yml` file (take a look at [https://docs.docker.com/compose/extends](https://docs.docker.com/compose/extends) for more info on Docker compose config override).
+
+This project provides a [docker-compose.override.yml.example](./docker-compose.override.yml.example) file that you can use as base.
+
+Copy the file `docker-compose.override.yml.example` to `docker-compose.override.yml` and adjust the configuration parameters.
+
+```bash
+cp docker-compose.override.yml.example docker-compose.override.yml
+```
+
+Then you can start the MQTT broker using the following command:
+
+```bash
+docker-compose up
+```
+
+> Note: just modify the `docker-compose.yml` file if you don't want to handle an additional `docker-compose.override.yml` file.
+
+## FAQ
+
+### Why do I not get feedback when publishing to a topic
+
+In general, if you want to know if publishing to a topic succeeded, subscribe to that topic. All of your published messages should show up in your subscription.
+
+For topics that need authentication, this is not always true. You may be allowed to subscribe to a topic as anonymous, but due to access control restrictions on that topic you may not see your published messages. You may even not notice that publishing did not succeed when you are not allowed to.
+
+If in doubt, please first double check that you use the correct topic and credentials (where necessary). If you still have troubles, please contact our [support](#support).
+
+### Default topics
+
+Given that you don't provide your own mosquitto config (see [Custom MQTT configuration](#custom-mqtt-configuration) on how to do this), mosquitto defines two topics:
+
+- `/open/#`: anyone can subscribe / publish to this topic (anonymous access)
+- `flightdata`: special topic with authentication to publish / subscribe flightdata (see [https://github.com/noi-techpark/odh-datacollector-flightdata](https://github.com/noi-techpark/odh-datacollector-flightdata)).
 
 ## Information
 
