@@ -4,7 +4,7 @@ services:
   mosquitto:
     image: ${DOCKER_IMAGE}:${DOCKER_TAG}
     restart: unless-stopped
-    command: mosquitto -c /mosquitto-with-auth.conf
+    command: mosquitto -c /conf/mosquitto.conf
     environment:
       SERVER_PORT: ${SERVER_PORT}
       AUTH_USER: ${AUTH_USER}
