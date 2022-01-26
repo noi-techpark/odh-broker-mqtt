@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: infrastructure/docker/Dockerfile
+      target: configured
     command: mosquitto -c /mosquitto-with-auth.conf
     environment:
       AUTH_USER: ${AUTH_USER}
