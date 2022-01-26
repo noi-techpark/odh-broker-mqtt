@@ -2,8 +2,12 @@ version: "3.4"
 
 services:
   mosquitto:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile
+      target: base
     # We expect a "mosquitto.conf" file to be in the "/config" folder
     command: mosquitto -c /config/mosquitto.conf
     volumes:
-      # We expect the mosquitto config files to be located in the currrent folder "config"
+      # We expect the mosquitto config files to be located in the current folder "config"
       - ./config:/config:ro
