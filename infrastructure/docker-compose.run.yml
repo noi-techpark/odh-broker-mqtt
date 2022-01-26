@@ -4,13 +4,11 @@ services:
   mosquitto:
     image: ${DOCKER_IMAGE}:${DOCKER_TAG}
     restart: unless-stopped
-    command: mosquitto -c /conf/mosquitto.conf
+    command: mosquitto -c /config/mosquitto.conf
     environment:
       SERVER_PORT: ${SERVER_PORT}
-      AUTH_USER: ${AUTH_USER}
-      AUTH_PASSWORD: ${AUTH_PASSWORD}
-      TOPIC_ANONYMOUS: ${TOPIC_ANONYMOUS}
-      TOPIC_RESTRICTED: ${TOPIC_RESTRICTED}
     ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
-
+      - ${SERVER_PORT}:1883
+    # Mount config files, e.g. from local "config" folder
+    # volumes:
+    #   - ./config:/config:ro
