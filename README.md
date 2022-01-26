@@ -58,12 +58,13 @@ The service will be available at localhost and your specified server port.
 
 ### Custom MQTT configuration
 
-If you want to provide a custom MQTT configuration, you have to do two things:
+If you want to provide a custom MQTT configuration, you have to do three things:
 
+- target the base image of the provided Dockerfile
 - provide your config files when you start Docker Compose
 - change the Docker Compose command to start mosquitto with your configuration
 
-> Note: if you provide your own config files, the settings in a `.env` file become irrelevant.
+> Note: if you provide your own config files, the settings in a `.env` file becomes irrelevant.
 
 The best way to provide your own config is to override the relevant parts in a `docker-compose.override.yml` file (take a look at [https://docs.docker.com/compose/extends](https://docs.docker.com/compose/extends) for more info on Docker compose config override).
 
@@ -75,7 +76,7 @@ Copy the file `docker-compose.override.yml.example` to `docker-compose.override.
 cp docker-compose.override.yml.example docker-compose.override.yml
 ```
 
-Then you can start the MQTT broker using the following command:
+provide your config files inside the `./config` folder. Finally, start the MQTT broker using the following command:
 
 ```bash
 docker-compose up
