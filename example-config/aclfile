@@ -1,0 +1,3 @@
+topic readwrite /open/#
+user flightdata_user
+topic readwrite flightdata/sbs
