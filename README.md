@@ -24,6 +24,9 @@ configuration](#custom-mqtt-configuration) section.
   - [FAQ](#faq)
     - [Why do I not get feedback when publishing to a topic](#why-do-i-not-get-feedback-when-publishing-to-a-topic)
     - [Default topics](#default-topics)
+    - [Testing](#testing)
+      - [How can I check if publishing succeeded?](#how-can-i-check-if-publishing-succeeded)
+      - [How do I publish / subscribe to the MQTT broker?](#how-do-i-publish--subscribe-to-the-mqtt-broker)
   - [Information](#information)
     - [Guidelines](#guidelines)
     - [Support](#support)
@@ -118,10 +121,11 @@ Rename `example-config` to `config`, and mount that folder, when you start the
 container. Files are as follows:
 - `aclfile`: See [Default topics](#default-topics) for some explanations
 - `passwordfile`: Each configured username and encrypted password (use
-  `mosquitto_password` to create new ones)
+  `mosquitto_passwd` to create new ones)
 - `mosquitto.conf`: The main config file 
 
-For more information look into [Mosquitto Docs](https://mosquitto.org/documentation/).
+For more information look into [Mosquitto
+Docs](https://mosquitto.org/documentation/).
 
 ## FAQ
 
@@ -149,6 +153,52 @@ two topics:
 - `flightdata`: special topic with authentication to publish / subscribe
   flightdata (see
   [https://github.com/noi-techpark/odh-datacollector-flightdata](https://github.com/noi-techpark/odh-datacollector-flightdata)).
+
+### Testing
+
+#### How can I check if publishing succeeded?
+
+In general, if you want to know if publishing to a topic succeeded, subscribe to
+that topic. All of your published messages should show up in your subscription.
+
+For topics that need authentication, this is not always true. You may be allowed
+to subscribe to a topic as anonymous, but due to access control restrictions on
+that topic you may not see your published messages. You may even not notice that
+publishing did not succeed when you are not allowed to.
+
+If in doubt, please first double check that you use the correct topic and
+credentials (where necessary). If you still have troubles, please contact our
+[support](#support).
+
+#### How do I publish / subscribe to the MQTT broker?
+
+You can use any MQTT client you want to publish messages to the MQTT broker,
+e.g. [MQTT Explorer](http://mqtt-explorer.com/) or [MQTTX](https://mqttx.app/). 
+
+You can also use the mosquitto publish / subscribe features provided by
+mosquitto. 
+
+Use the following command to subscribe to the topic `/open/test` on localhost:
+
+```bash
+# Subscribe to the topic /open/test using the MQTT instance on localhost
+
+docker run -it --rm --name mosquitto-sub --network="host" eclipse-mosquitto:2.0.12 sh -c "mosquitto_sub -t '/open/test' -h localhost"
+```
+
+Using the Docker version of mosquitto, you can publish a message to topic
+`/open/test` on localhost using the following command:
+
+```bash
+# Publish the message "some" (= valid JSON string) to the topic /open/test using the MQTT instance on localhost
+# Please make sure that you correctly escape the double ticks in the message in order to provide valid JSON. 
+
+docker run -it --rm --name mosquitto-pub --network="host" eclipse-mosquitto:2.0.12 sh -c "mosquitto_pub -t '/open/test' -h localhost -m '\"some\"'"
+```
+
+No message arrives? Check your permissions when you publish or subscribe to a
+certain topic.
+
 
 ## Information
 
