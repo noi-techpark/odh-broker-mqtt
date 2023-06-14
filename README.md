@@ -210,7 +210,7 @@ guidelines for developers.
 ### Support
 
 For support, please contact
-[help@opendatahub.bz.it](mailto:help@opendatahub.bz.it).
+[help@opendatahub.com](mailto:help@opendatahub.com).
 
 ### Contributing
 
